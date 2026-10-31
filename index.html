@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK" id="top">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>費馬最後定理 · 一句頁邊註記，數學家追了 358 年</title>
+<meta name="description" content="費馬最後定理（Fermat's Last Theorem）完整解說：方程 x^n + y^n = z^n 為何在 n≥3 時沒有正整數解、這個定理是對還是錯、以及 Andrew Wiles 1995 年的證明思路。附互動反例搜尋器。">
+<meta name="theme-color" content="#f6f2ea">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%231c1a17'/%3E%3Ctext x='50' y='68' font-size='56' font-family='Georgia,serif' fill='%23f3ede0' text-anchor='middle'%3Ex%3C/text%3E%3C/svg%3E">
+<meta property="og:title" content="費馬最後定理 · 一句頁邊註記，數學家追了 358 年">
+<meta property="og:description" content="它講甚麼、是對還是錯、人類怎樣證明它。含互動反例搜尋器。">
+<meta property="og:type" content="article">
+<style>
+  :root{
+    --paper:#f6f2ea;
+    --card:#fffdf7;
+    --ink:#191714;
+    --ink2:#4b453c;
+    --muted:#7c7468;
+    --line:#ded6c6;
+    --red:#a8321e;
+    --red-soft:#f4e4df;
+    --gold:#b8842c;
+    --slate:#2f4858;
+    --dark:#1c1a17;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth; -webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Noto Serif TC","Songti TC","Songti SC","Source Han Serif TC",Georgia,"PingFang HK","Microsoft JhengHei",serif;
+    line-height:1.88;font-size:16.5px;
+    -webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(1100px 620px at 8% -12%, rgba(168,50,30,.07), transparent 62%),
+      radial-gradient(900px 520px at 98% 6%, rgba(47,72,88,.07), transparent 60%),
+      radial-gradient(700px 400px at 50% 108%, rgba(184,132,44,.07), transparent 65%);
+  }
+  .wrap{max-width:940px;margin:0 auto;padding:0 22px;position:relative;z-index:1}
+
+  /* ---------- nav ---------- */
+  .nav{position:sticky;top:0;z-index:60;background:rgba(246,242,234,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .nav-in{max-width:940px;margin:0 auto;padding:9px 18px;display:flex;align-items:center;gap:4px;overflow-x:auto;scrollbar-width:none}
+  .nav-in::-webkit-scrollbar{display:none}
+  .brand{font-size:.7rem;letter-spacing:.22em;color:var(--red);font-weight:700;padding-right:12px;border-right:1px solid var(--line);margin-right:8px;white-space:nowrap}
+  .nav a{font-size:.8rem;color:var(--ink2);text-decoration:none;padding:6px 9px;border-radius:999px;white-space:nowrap;transition:.18s}
+  .nav a:hover{background:var(--red-soft);color:var(--red)}
+
+  /* ---------- hero ---------- */
+  .hero{padding:66px 0 46px;border-bottom:1px solid var(--line);position:relative}
+  .kicker{display:inline-flex;align-items:center;gap:9px;font-size:.7rem;letter-spacing:.2em;color:var(--red);border:1px solid rgba(168,50,30,.28);padding:5px 13px;border-radius:999px;background:rgba(255,253,247,.6)}
+  .kicker i{width:5px;height:5px;background:var(--red);border-radius:50%;display:block}
+  h1{font-size:clamp(2.15rem,6.6vw,3.9rem);line-height:1.14;margin:22px 0 0;font-weight:700;letter-spacing:-.015em}
+  h1 em{font-style:normal;color:var(--red)}
+  .lede{font-size:clamp(1rem,2.3vw,1.14rem);color:var(--ink2);max-width:36em;margin:20px 0 0}
+
+  .hero-eq{
+    display:flex;align-items:center;justify-content:center;flex-wrap:wrap;
+    gap:.1em;font-family:"Times New Roman",Times,serif;font-style:italic;
+    font-size:clamp(1.45rem,6.4vw,2.7rem);line-height:1.6;
+    margin:38px 0 4px;color:var(--ink);
+  }
+  .hero-eq sup{font-size:.52em;font-style:normal;vertical-align:super;line-height:0}
+  .hero-eq .op{font-style:normal;color:var(--muted);padding:0 .18em}
+  .hero-eq .tag{font-style:normal;font-size:.34em;letter-spacing:.12em;color:var(--red);border:1px solid rgba(168,50,30,.35);padding:.35em .7em;border-radius:6px;margin-left:.9em;vertical-align:middle;font-family:"Noto Serif TC",serif}
+  .eq-cap{text-align:center;font-size:.78rem;color:var(--muted);letter-spacing:.06em;margin:0 0 6px}
+
+  .quote{margin:34px 0 0;padding:20px 24px;border-left:3px solid var(--red);background:rgba(255,253,247,.62)}
+  .quote p{margin:0;font-size:.98rem;color:var(--ink2);line-height:1.95}
+  .quote cite{display:block;margin-top:12px;font-size:.76rem;color:var(--muted);font-style:normal;letter-spacing:.05em}
+
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:40px 0 0}
+  .stat{background:var(--card);padding:18px 15px}
+  .stat b{display:block;font-family:"Times New Roman",Times,serif;font-size:clamp(1.25rem,4.2vw,1.62rem);color:var(--red);line-height:1.25;font-weight:700}
+  .stat span{font-size:.73rem;color:var(--muted);letter-spacing:.04em;display:block;margin-top:3px;line-height:1.6}
+
+  /* ---------- sections ---------- */
+  section{padding:62px 0;border-bottom:1px solid var(--line);position:relative;scroll-margin-top:60px}
+  .sec-head{display:flex;gap:13px;align-items:baseline;margin:0 0 6px}
+  .sec-num{font-family:"Times New Roman",serif;font-size:.85rem;color:var(--red);letter-spacing:.1em;flex:none;padding-top:.35em}
+  h2{font-size:clamp(1.42rem,4.2vw,2.02rem);margin:0;line-height:1.3;font-weight:700;letter-spacing:-.01em}
+  .sub{color:var(--muted);font-size:.85rem;margin:6px 0 26px 0;letter-spacing:.02em}
+  h3{font-size:1.02rem;margin:34px 0 6px;color:var(--ink);letter-spacing:.01em}
+  p{margin:13px 0;color:var(--ink2)}
+  .drop::first-letter{font-size:2.9em;float:left;line-height:.92;padding:.06em .12em 0 0;color:var(--red);font-weight:700}
+  strong{color:var(--ink);font-weight:700}
+  em{font-style:italic}
+  .hl{background:linear-gradient(transparent 63%, rgba(184,132,44,.32) 63%);padding:0 2px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 24px;margin:24px 0;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+  .card.tight{padding:18px 20px}
+
+  .verdict{display:flex;gap:18px;align-items:flex-start;background:var(--card);border:1px solid rgba(168,50,30,.25);border-left:4px solid var(--red);border-radius:14px;padding:22px 22px;margin:26px 0}
+  .seal{flex:none;width:62px;height:62px;border:2px solid var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--red);font-size:.86rem;font-weight:700;letter-spacing:.06em;line-height:1.25;text-align:center;transform:rotate(-7deg);background:rgba(168,50,30,.04)}
+  .verdict h3{margin:0 0 4px;font-size:1.06rem}
+  .verdict p{margin:4px 0;font-size:.95rem}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:22px 0}
+  .mini{background:rgba(255,253,247,.7);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .mini h4{margin:0 0 6px;font-size:.92rem;color:var(--red);letter-spacing:.04em;font-weight:700}
+  .mini p{margin:0;font-size:.88rem;line-height:1.8}
+
+  .eqbox{background:var(--dark);color:#f3ede0;border-radius:16px;padding:26px 22px;text-align:center;margin:24px 0;overflow:hidden}
+  .eqbox .math{font-family:"Times New Roman",Times,serif;font-style:italic;font-size:clamp(1.25rem,4.6vw,1.85rem);letter-spacing:.02em}
+  .eqbox .math sup{font-size:.55em;font-style:normal}
+  .eqbox .note{font-size:.76rem;color:#a9a291;margin-top:10px;letter-spacing:.05em;font-style:normal;font-family:"Noto Serif TC",serif}
+
+  /* ---------- timeline ---------- */
+  .tl{position:relative;margin:30px 0 0;padding-left:26px}
+  .tl::before{content:"";position:absolute;left:6px;top:8px;bottom:8px;width:1px;background:linear-gradient(var(--line),var(--line))}
+  .tl-item{position:relative;padding:0 0 24px 0}
+  .tl-item::before{content:"";position:absolute;left:-24px;top:9px;width:9px;height:9px;border-radius:50%;background:var(--paper);border:2px solid var(--red)}
+  .tl-item.key::before{background:var(--red);box-shadow:0 0 0 4px rgba(168,50,30,.12)}
+  .tl-yr{font-family:"Times New Roman",serif;font-size:.95rem;color:var(--red);font-weight:700;letter-spacing:.03em}
+  .tl-tx{font-size:.92rem;color:var(--ink2);line-height:1.8}
+  .tl-tx b{color:var(--ink)}
+
+  /* ---------- chain ---------- */
+  .chain{margin:26px 0;display:flex;flex-direction:column;gap:0}
+  .step{display:flex;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;position:relative}
+  .step .no{flex:none;width:30px;height:30px;border-radius:50%;background:var(--red-soft);color:var(--red);display:flex;align-items:center;justify-content:center;font-family:"Times New Roman",serif;font-weight:700;font-size:.9rem}
+  .step h4{margin:2px 0 4px;font-size:.95rem;color:var(--ink)}
+  .step p{margin:0;font-size:.88rem;line-height:1.8}
+  .arrow{text-align:center;color:var(--red);font-size:1rem;line-height:1;padding:7px 0;opacity:.55}
+
+  /* ---------- demo ---------- */
+  .demo{background:var(--dark);border-radius:18px;padding:26px 22px 22px;margin:26px 0;color:#efe9dc;box-shadow:0 18px 40px -24px rgba(0,0,0,.6)}
+  .demo h3{color:#fff;margin:0 0 4px;font-size:1.1rem}
+  .demo .dsub{font-size:.8rem;color:#a49d8c;margin:0 0 20px;letter-spacing:.04em}
+  .ctrl{display:grid;grid-template-columns:1fr;gap:16px;margin:0 0 18px}
+  .ctrl-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .ctrl label{font-size:.78rem;color:#c7c0ae;letter-spacing:.08em;min-width:64px}
+  .seg{display:flex;gap:4px;flex-wrap:wrap}
+  .seg button{
+    font-family:inherit;font-size:.85rem;border:1px solid #3d382f;background:#26231e;color:#ddd5c3;
+    padding:6px 13px;border-radius:8px;cursor:pointer;transition:.15s
+  }
+  .seg button:hover{border-color:#6b6252}
+  .seg button.on{background:var(--gold);border-color:var(--gold);color:#1c1a17;font-weight:700}
+  input[type=range]{-webkit-appearance:none;appearance:none;flex:1;min-width:130px;height:3px;background:#3d382f;border-radius:99px;outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--gold);cursor:pointer;border:none}
+  input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--gold);cursor:pointer;border:none}
+  .val{font-family:"Times New Roman",serif;color:var(--gold);font-size:.95rem;min-width:44px;text-align:right}
+  .out{border-top:1px solid #332f28;padding-top:16px}
+  .out-line{font-size:.9rem;color:#d8d1c0;line-height:1.8}
+  .out-line b{color:var(--gold);font-family:"Times New Roman",serif;font-size:1.1em}
+  .sol{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .sol span{font-family:"Times New Roman",serif;font-style:italic;font-size:.95rem;background:#2a261f;border:1px solid #3b352b;color:#e6dfcd;padding:4px 10px;border-radius:7px}
+  .warn{font-size:.78rem;color:#9b9484;margin-top:14px;line-height:1.75;border-left:2px solid var(--gold);padding-left:10px}
+
+  /* ---------- faq ---------- */
+  details{border-bottom:1px solid var(--line);padding:2px 0}
+  details summary{
+    cursor:pointer;list-style:none;padding:15px 30px 15px 0;position:relative;
+    font-size:.97rem;color:var(--ink);font-weight:700;line-height:1.7
+  }
+  details summary::-webkit-details-marker{display:none}
+  details summary::after{content:"+";position:absolute;right:4px;top:12px;color:var(--red);font-size:1.2rem;font-weight:400;transition:.2s}
+  details[open] summary::after{transform:rotate(45deg)}
+  details .fa-body{padding:0 0 18px;font-size:.92rem;color:var(--ink2);line-height:1.85}
+  details .fa-body p{margin:8px 0;font-size:.92rem}
+
+  /* ---------- sources ---------- */
+  .src{list-style:none;padding:0;margin:18px 0 0;counter-reset:s}
+  .src li{position:relative;padding:0 0 14px 26px;font-size:.86rem;color:var(--ink2);line-height:1.8}
+  .src li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:1px;font-family:"Times New Roman",serif;color:var(--red);font-size:.8rem}
+  .src a{color:var(--slate);text-decoration:none;border-bottom:1px solid rgba(47,72,88,.3);word-break:break-word}
+  .src a:hover{color:var(--red);border-color:var(--red)}
+
+  footer{padding:38px 0 64px;font-size:.78rem;color:var(--muted);line-height:1.9}
+  footer b{color:var(--ink2)}
+  .backtop{display:inline-block;margin-top:8px;font-size:.78rem;color:var(--red);text-decoration:none;border-bottom:1px solid rgba(168,50,30,.3)}
+
+  @media (max-width:620px){
+    body{font-size:16px;line-height:1.85}
+    .hero{padding:46px 0 36px}
+    section{padding:50px 0}
+    .grid2{grid-template-columns:1fr}
+    .stats{grid-template-columns:1fr;gap:1px}
+    .stat{display:flex;align-items:baseline;gap:10px;padding:13px 16px}
+    .stat span{display:inline;margin:0}
+    .verdict{gap:14px;padding:18px}
+    .seal{width:54px;height:54px;font-size:.76rem}
+    .quote{padding:16px 18px}
+    .card{padding:20px}
+  }
+  @media print{
+    .nav,.demo,.backtop{display:none}
+    body{background:#fff}
+  }
+</style>
+</head>
+<body id="top">
+
+<nav class="nav">
+  <div class="nav-in">
+    <span class="brand">費馬最後定理</span>
+    <a href="#what">命題</a>
+    <a href="#story">故事</a>
+    <a href="#true">啱定錯</a>
+    <a href="#timeline">時間線</a>
+    <a href="#proof">證明思路</a>
+    <a href="#demo">自己搵反例</a>
+    <a href="#faq">常見誤解</a>
+    <a href="#ref">資料</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="kicker"><i></i>數學 · 數論 · 一個等了 358 年的證明</span>
+    <h1>一句寫在書邊的註記，<br><em>數學家追了 358 年</em></h1>
+    <p class="lede">
+      費馬最後定理講的其實是一句很「小學」的話：把一個立方數拆成兩個立方數相加，做不到；四次方，做不到；五次方、六次方、以至於任何三次以上，全部都做不到。
+      問題是 —— 為甚麼？又憑甚麼肯定？
+    </p>
+
+    <div class="hero-eq" aria-label="x 的 n 次方加 y 的 n 次方等於 z 的 n 次方">
+      <span>x<sup>n</sup></span><span class="op">+</span><span>y<sup>n</sup></span><span class="op">=</span><span>z<sup>n</sup></span>
+      <span class="tag">n ≥ 3 · 無正整數解</span>
+    </div>
+    <p class="eq-cap">1637 年之前無人能證，1995 年之後無需再證</p>
+
+    <div class="quote">
+      <p>「將一個立方數分成兩個立方數之和、一個四次方數分成兩個四次方數之和，或者一般地將任何高於二次的冪分成兩個同次冪之和，都是不可能的。我確實發現了一個非常美妙的證明，但這裡的頁邊太窄，寫不下。」</p>
+      <cite>—— 皮埃爾·德·費馬，1637 年寫在丟番圖《算術》頁邊的筆記（中文意譯）</cite>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b>358 年</b><span>由 1637 年註記到 1995 年正式發表</span></div>
+      <div class="stat"><b>109 頁</b><span>Wiles 最終論文篇幅（Annals of Mathematics）</span></div>
+      <div class="stat"><b>0 個</b><span>三百多年來找到的反例數目</span></div>
+    </div>
+  </div>
+</header>
+
+<section id="what">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">01</span><h2>一句話講完：它到底在講甚麼</h2></div>
+    <p class="sub">先把命題講到連小學生都聽得明</p>
+
+    <p>找三個<strong>正整數</strong> <em>x</em>、<em>y</em>、<em>z</em>，令到</p>
+
+    <div class="eqbox">
+      <div class="math">x<sup>n</sup> + y<sup>n</sup> = z<sup>n</sup></div>
+      <div class="note">x, y, z 為正整數 · n 為整數且 n ≥ 3</div>
+    </div>
+
+    <p>費馬最後定理說的是：<span class="hl">這樣的解，一組都不存在。</span></p>
+
+    <div class="grid2">
+      <div class="mini">
+        <h4>n = 2：有很多解</h4>
+        <p>3² + 4² = 5²，5² + 12² = 13²，8² + 15² = 17²……這就是人人中學都見過的「畢氏三元組」，而且<strong>有無限多組</strong>。</p>
+      </div>
+      <div class="mini">
+        <h4>n ≥ 3：一組都沒有</h4>
+        <p>3³ + 4³ = 91，不是任何整數的立方；試盡所有數字都一樣。由三次方開始，方程突然「斷絕」了所有正整數解。</p>
+      </div>
+    </div>
+
+    <p>所以定理不是說「這條方程無解」—— <em>n</em> = 2 時它明明有無限多解。它說的是：<strong>由三次方開始，整整一整個無限家族，全部無解。</strong>這種「一刀切」的乾淨，正是它嚇人的地方。</p>
+
+    <h3>為甚麼只需檢查質數指數？</h3>
+    <p>假設 <em>n</em> 可以分解成 <em>n</em> = <em>m</em> · <em>p</em>（<em>p</em> 為質數）。那麼</p>
+    <div class="eqbox">
+      <div class="math">x<sup>n</sup> + y<sup>n</sup> = (x<sup>m</sup>)<sup>p</sup> + (y<sup>m</sup>)<sup>p</sup></div>
+      <div class="note">即：若指數 n 有解，則指數 p 亦有解</div>
+    </div>
+    <p>反過來講，只要證明<strong>指數為質數 <em>p</em> 時無解</strong>，所有 <em>p</em> 的倍數就自動無解。再加上 <em>n</em> = 4 這個特例（任何 ≥ 3 的整數，要麼被 4 整除，要麼有一個奇質因數），整個無限的問題就縮減成「所有奇質數 + 4」—— 一個仍然無限、但結構清晰得多的清單。</p>
+  </div>
+</section>
+
+<section id="story">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">02</span><h2>故事的開頭：一位法官的頁邊筆記</h2></div>
+    <p class="sub">1637 年 · 圖盧茲</p>
+
+    <p class="drop">皮埃爾·德·費馬（Pierre de Fermat, 1601–1665）正職是法國圖盧茲地方法院的法官，數學是他的「副業」。他有一個習慣：讀書時把想法直接寫在書的空白處，而且<strong>幾乎從不寫下證明過程</strong>。他會寫「我證明了」，然後就沒有然後。</p>
+
+    <p>1637 年，他在古希臘數學家丟番圖《算術》的一本拉丁文譯本頁邊，讀到關於畢氏定理的討論，於是寫下了那段著名的話。他當時應該沒有想過，這幾行字會變成數學史上最貴的一句「寫唔落」。</p>
+
+    <p>費馬 1665 年去世。他的兒子克萊門特－薩繆爾整理了父親的註記，1670 年出版了帶註解的《算術》版本，這段頁邊話才公開於世。此後三百多年，它一直被叫做「費馬最後定理」—— 之所以叫「最後」，是因為它是費馬遺留下來、最後一個未被解決的猜想。</p>
+
+    <div class="card tight">
+      <p style="margin:0;font-size:.9rem"><strong>一個有趣的細節：</strong>費馬其實證明了 <em>n</em> = 4 的情況（用「無限下降法」，而且證明是完整留下的）。所以他自己至少知道，這條路的第一步該怎樣走。但他那句「絕妙證明」從來沒有人找到，也沒有任何 17 世紀的數學工具足以支撐它。</p>
+    </div>
+  </div>
+</section>
+
+<section id="true">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">03</span><h2>啱定錯？答案是：啱，而且已經證實</h2></div>
+    <p class="sub">它不再是「猜想」，而是「定理」</p>
+
+    <div class="verdict">
+      <div class="seal">已證<br>成立</div>
+      <div>
+        <h3>這是真的命題，不是未解之謎</h3>
+        <p>1994 年 9 月，英國數學家<strong>安德魯·懷爾斯（Andrew Wiles）</strong>與<strong>理查德·泰勒（Richard Taylor）</strong>補上了證明的最後一道缺口；1995 年 5 月，論文正式刊於《數學年刊》（<em>Annals of Mathematics</em>）第 141 卷。自此，它是一條<strong>定理</strong>，不是猜想。</p>
+      </div>
+    </div>
+
+    <h3>三件要分清楚的事</h3>
+
+    <p><strong>第一，「定理」這個詞有門檻。</strong>數學裡，猜想（conjecture）是「相信但未證」，定理（theorem）是「已嚴格證明並經同行審查」。1994 年之前，大家習慣叫它 Fermat's Last Theorem，其實是歷史慣性 —— 當時它技術上仍是猜想。1995 年之後，這個名字才真正名副其實。</p>
+
+    <p><strong>第二，「電腦試過冇反例」不等於證明。</strong>電腦可以窮舉到極大的數字範圍，而事實上也真的有人做過，全部都找不到反例。但整數有無限多個，<span class="hl">有限次的檢驗，永遠無法覆蓋無限</span>。這就是為甚麼需要一個真正的證明，而不是更快的電腦。</p>
+
+    <p><strong>第三，費馬本人那個「絕妙證明」，幾乎肯定不存在。</strong>理由很直接：<em>n</em> = 3 的情況連歐拉（Euler）都要小心處理，他當年的證明還被後人發現有漏洞；<em>n</em> = 4 要用無限下降法；而現代證明動用了 20 世紀的模形式、伽羅瓦表示、代數幾何。很難想像 17 世紀的頁邊可以塞得下這些。<strong>更可能的解釋是：費馬證明了某個他以為等價、但其實不等價的東西。</strong></p>
+
+    <div class="card tight">
+      <p style="margin:0;font-size:.9rem"><strong>「啱」的前提要講清楚：</strong>定理講的是<strong>正整數</strong>。如果放寬到實數，1³ + 2³ = 9 = (∛9)³，解當然要多少有多少。數學命題的真假，永遠相對於它的假設。</p>
+    </div>
+  </div>
+</section>
+
+<section id="timeline">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">04</span><h2>由猜想走到定理：358 年的時間線</h2></div>
+    <p class="sub">每一格，都是一代人卡住的地方</p>
+
+    <div class="tl">
+      <div class="tl-item key">
+        <div class="tl-yr">1637</div>
+        <div class="tl-tx">費馬在《算術》頁邊寫下註記，聲稱有「絕妙證明」但頁邊太窄。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-yr">1670</div>
+        <div class="tl-tx">費馬之子出版帶註解的《算術》，這段筆記首次公開。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-yr">1770</div>
+        <div class="tl-tx"><b>歐拉（Euler）</b>處理 <em>n</em> = 3，在整數環 ℤ[√−3] 上做分解 —— 但他的唯一分解假設有漏洞，後由勒讓德補正。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-yr">1823</div>
+        <div class="tl-tx"><b>索菲·熱爾曼（Sophie Germain）</b>取得突破：若 <em>p</em> 為質數且 <em>x</em>、<em>y</em>、<em>z</em> 全部不被 <em>p</em> 整除，則無解。這是第一個「一整類指數」的結果。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-yr">1825</div>
+        <div class="tl-tx">狄利克雷與勒讓德各自證出 <em>n</em> = 5。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-yr">1839</div>
+        <div class="tl-tx">拉梅（Lamé）證出 <em>n</em> = 7。逐個指數擊破的時代。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-yr">1847</div>
+        <div class="tl-tx"><b>庫默（Kummer）</b>引入「理想數」修補唯一分解的失效，一舉證明所有<strong>正則質數</strong>（regular primes）都成立 —— 100 以下的質數中，只剩 37、59、67 三個未覆蓋。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-yr">1955</div>
+        <div class="tl-tx">日本數學家<b>谷山豐</b>與<b>志村五郎</b>提出猜想：所有橢圓曲線都對應某個模形式。當時無人預料，這條猜想會成為終結費馬問題的鑰匙。</div>
+      </div>
+      <div class="tl-item key">
+        <div class="tl-yr">1985</div>
+        <div class="tl-tx"><b>弗雷（Gerhard Frey）</b>提出驚人想法：如果費馬方程有解，就能造出一條「行為怪異」的橢圓曲線，它不可能是模形式。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-yr">1986</div>
+        <div class="tl-tx"><b>里貝特（Ken Ribet）</b>嚴格證明弗雷的直覺：那條曲線確實不可能是模形式。於是「證明谷山－志村猜想」就等於「證明費馬最後定理」。</div>
+      </div>
+      <div class="tl-item key">
+        <div class="tl-yr">1993 · 6</div>
+        <div class="tl-tx">懷爾斯在劍橋牛頓研究所連續三天演講，最後一刻宣佈證明完成。全球頭條。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-yr">1993 · 12</div>
+        <div class="tl-tx">審稿過程中發現致命漏洞：關鍵的「歐拉系統」上界推導不成立。證明暫時崩塌。</div>
+      </div>
+      <div class="tl-item key">
+        <div class="tl-yr">1994 · 9</div>
+        <div class="tl-tx">懷爾斯與學生泰勒找到出路，用後來被稱為 <b>Taylor–Wiles 系統</b> 的方法繞過漏洞。9 月 19 日，他寫下「I think I've got it」。</div>
+      </div>
+      <div class="tl-item key">
+        <div class="tl-yr">1995 · 5</div>
+        <div class="tl-tx">兩篇論文同期刊於《數學年刊》第 141 卷，109 頁與 20 頁。定理正式成立。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-yr">2001</div>
+        <div class="tl-tx">後續工作把結果由「半穩定曲線」推廣到<strong>所有</strong>有理數上的橢圓曲線，成為完整的模性定理（Modularity Theorem）。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-yr">2016</div>
+        <div class="tl-tx">懷爾斯獲頒<strong>阿貝爾獎</strong>（Abel Prize），相當於數學界的諾貝爾獎。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="proof">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">05</span><h2>證明是怎麼做的？</h2></div>
+    <p class="sub">先講骨架，再講三個層次</p>
+
+    <p>先說一句老實話：<strong>完整的證明不可能在一個網頁裡講完。</strong>懷爾斯的論文本身 109 頁，預設讀者已掌握模形式、伽羅瓦表示、代數幾何。但證明的<em>骨架</em>其實相當漂亮，而且可以用日常語言講清楚 —— 以下就是那副骨架。</p>
+
+    <p>整個策略可以濃縮成一句：<span class="hl">不直接解方程，而是證明「如果它有解，就會逼出一件根本不可能存在的東西」。</span></p>
+
+    <h3>第一層：把無限的問題縮小</h3>
+    <p>如上一節所述，只需處理<strong>奇質數指數</strong>與 <em>n</em> = 4。這一步在 17 至 19 世紀就完成了，但它把「所有 n ≥ 3」變成「所有質數 p ≥ 3」，讓後人可以逐個擊破。</p>
+
+    <h3>第二層：古典方法（17–19 世紀）</h3>
+    <p>這一層的關鍵詞是<strong>唯一分解</strong>。整數有一個我們習以為常的性質：每個數分解成質數乘積的方式是唯一的。19 世紀的數學家試圖把這個性質搬到更大的數系（例如 ℤ[√−3]、ℤ[ζ<sub>p</sub>]）裡使用，結果發現它<strong>不一定成立</strong>。</p>
+    <ul style="color:var(--ink2);font-size:.94rem;line-height:1.9;padding-left:20px">
+      <li><b>歐拉（n = 3）</b>：在 ℤ[√−3] 上分解，但該環並非唯一分解環，證明存在缺口。</li>
+      <li><b>熱爾曼</b>：繞開這個問題，先處理 <em>x</em>、<em>y</em>、<em>z</em> 與 <em>p</em> 互質的情況。</li>
+      <li><b>庫默</b>：乾脆發明「理想數」來修復唯一分解，證明所有正則質數成立。這是代數數論的起點之一。</li>
+    </ul>
+    <p>但庫默的方法有極限：<strong>非正則質數</strong>（irregular primes，例如 37、59、67）處理不了。這條路走到 20 世紀中，已經非常吃力 —— 逐個質數補，永遠補不完。</p>
+
+    <h3>第三層：現代路線（1985–1995）</h3>
+    <p>真正的突破不在數論，而在<strong>幾何</strong>。弗雷的洞見是：把方程的解「翻譯」成一條曲線。</p>
+
+    <div class="chain">
+      <div class="step">
+        <div class="no">1</div>
+        <div>
+          <h4>假設有解，造一條曲線</h4>
+          <p>若有 <em>a<sup>p</sup></em> + <em>b<sup>p</sup></em> = <em>c<sup>p</sup></em>（<em>p</em> ≥ 5 為質數），弗雷考慮橢圓曲線 <em>E</em>：<em>y</em>² = <em>x</em>(<em>x</em> − <em>a<sup>p</sup></em>)(<em>x</em> + <em>b<sup>p</sup></em>)。這條曲線的判別式是 16(<em>abc</em>)<sup>2p</sup>，結構異常「整齊」。</p>
+        </div>
+      </div>
+      <div class="arrow">▼</div>
+      <div class="step">
+        <div class="no">2</div>
+        <div>
+          <h4>它「太乾淨」，乾淨到不可能是模形式</h4>
+          <p>塞爾（Serre）預測、里貝特（1986）證明：這條曲線對應的伽羅瓦表示可以一層層「降級」，最終降到 level 2。但 level 2 的模形式只有零，<strong>不存在</strong>。結論：<em>E</em> 不可能是模形式。</p>
+        </div>
+      </div>
+      <div class="arrow">▼</div>
+      <div class="step">
+        <div class="no">3</div>
+        <div>
+          <h4>但所有半穩定曲線都是模形式</h4>
+          <p>這正是懷爾斯證明的東西 —— 谷山－志村－韋伊猜想的一個重要特例。於是 <em>E</em> 既要「不是模形式」，又要「是模形式」。</p>
+        </div>
+      </div>
+      <div class="arrow">▼</div>
+      <div class="step">
+        <div class="no">4</div>
+        <div>
+          <h4>矛盾 → 假設不成立 → 定理成立</h4>
+          <p>所以 <em>a<sup>p</sup></em> + <em>b<sup>p</sup></em> = <em>c<sup>p</sup></em> 無正整數解。證畢。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card tight">
+      <p style="margin:0;font-size:.9rem"><strong>用一個比喻：</strong>假設費馬方程有解，就等於造出了一個「有身份證號碼、但戶籍資料庫裡完全查不到這個人」的公民。第 3 步證明「所有公民都一定在資料庫裡」，於是矛盾。</p>
+    </div>
+
+    <p>技術上，懷爾斯要處理的是<strong>伽羅瓦表示的變形環</strong>與 <strong>Hecke 代數</strong>之間的關係。他原本以為可以用「歐拉系統」直接比較兩者的尺寸，但那個上界推導在 1993 年被發現不成立。最終的修補方案（Taylor–Wiles 系統）非常巧妙：<span class="hl">不去硬碰那個上界，而是把問題搬到一個輔助的質數集合上，用計數論證反過來逼出等式。</span>這個方法後來成為整個 Langlands 計劃的核心工具之一，影響力遠超費馬定理本身。</p>
+
+    <h3>那有沒有「更簡單」的證明？</h3>
+    <p>至今<strong>沒有已知的初等證明</strong>。每年都有業餘愛好者寄來「三頁證明」，但都過不了審查。這不代表未來不可能，但可以肯定的說：任何可行的證明，都必須處理「唯一分解失效」這個深層障礙 —— 而這正是現代代數數論存在的理由。</p>
+    <p>另一個有趣的側面：如果 <strong>abc 猜想</strong>（至今仍未證明）成立，一般認為可以推出費馬最後定理對足夠大的指數成立。這說明費馬問題並不是一座孤島，而是整個數論結構的一個投影。</p>
+  </div>
+</section>
+
+<section id="demo">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">06</span><h2>自己動手：搵唔搵到反例？</h2></div>
+    <p class="sub">選一個指數，讓電腦窮舉所有組合</p>
+
+    <p>下面這個小工具會把所有 <em>a</em> &lt; <em>b</em> &lt; <em>c</em> ≤ 上限的組合全部試一次（用 BigInt 精確計算，不會有浮點誤差）。你可以親眼看到：<em>n</em> = 2 時解多得滿天飛，一到 3 就全部消失。</p>
+
+    <div class="demo">
+      <h3>反例搜尋器</h3>
+      <p class="dsub">精確整數運算 · 即時結果</p>
+
+      <div class="ctrl">
+        <div class="ctrl-row">
+          <label>指數 n</label>
+          <div class="seg" id="nSeg">
+            <button data-n="2" class="on">2</button>
+            <button data-n="3">3</button>
+            <button data-n="4">4</button>
+            <button data-n="5">5</button>
+            <button data-n="7">7</button>
+          </div>
+        </div>
+        <div class="ctrl-row">
+          <label>整數上限</label>
+          <input type="range" id="rng" min="20" max="200" step="10" value="80">
+          <span class="val" id="rngVal">80</span>
+        </div>
+      </div>
+
+      <div class="out">
+        <div class="out-line" id="outLine">正在計算…</div>
+        <div class="sol" id="solList"></div>
+        <div class="warn">
+          「0 組」只代表在這個範圍內找不到，<strong>不等於證明</strong>。整數有無限多個，電腦永遠試不完 —— 這正是為甚麼人類需要那 109 頁的證明。
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">07</span><h2>幾個常見誤解</h2></div>
+    <p class="sub">順手拆掉幾個流傳很廣的說法</p>
+
+    <details open>
+      <summary>既然 n ≥ 3 無解，為甚麼 n = 2 又有解？</summary>
+      <div class="fa-body">
+        <p>因為二次方對應的是「面積」，而三次以上對應的結構完全另一個層次。具體地說，<em>n</em> = 2 時方程對應圓上的有理點，而圓上可以用參數化造出無限多個有理點 —— 這就是畢氏三元組公式：</p>
+        <p style="text-align:center;font-family:'Times New Roman',serif;font-style:italic">(m² − k², 2mk, m² + k²)</p>
+        <p>取 <em>m</em> = 2、<em>k</em> = 1 得 (3, 4, 5)；取 <em>m</em> = 3、<em>k</em> = 2 得 (5, 12, 13)。但這套參數化只對二次曲線（虧格 0）有效；由三次方開始，曲線的虧格 ≥ 1，有理點的結構完全改變 —— 這正是費馬問題困難的幾何根源。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>會不會其實有反例，只是數字太大找不到？</summary>
+      <div class="fa-body">
+        <p>不會。這不是「未找到」，而是「已證明不存在」。1995 年的證明是演繹性的：它不依賴任何數值檢驗，而是從邏輯上排除所有可能。任何反例都會同時推翻模性定理 —— 而模性定理已被獨立驗證、廣泛應用。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>費馬那個「絕妙證明」是不是失傳了？</summary>
+      <div class="fa-body">
+        <p>幾乎肯定不是失傳，而是<strong>根本不存在</strong>（或者證明的對象不是我們以為的東西）。理由：<em>n</em> = 3 已需要代數數論的技巧，<em>n</em> = 4 要用無限下降法，而一般情形需要 20 世紀的模形式理論。17 世紀的數學語言裡，沒有可以承載這個證明的結構。</p>
+        <p>數學史家的共識比較接近：費馬很可能證明了某個他以為等價的命題，或者只在某些特例上成立。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>為甚麼 n = 4 要另外處理？不是已經包含在「所有指數」裡嗎？</summary>
+      <div class="fa-body">
+        <p>因為 4 不是質數，但它也不是任何奇質數的倍數 —— 它是 2 的冪。所以「只需檢查質數」這一步漏掉了它，必須單獨證明。費馬本人用無限下降法證明了 <em>x</em>⁴ + <em>y</em>⁴ = <em>z</em>⁴ 無解，這是整條路上最早被攻克的一塊。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>證明了這個，有甚麼實際用途？</summary>
+      <div class="fa-body">
+        <p>費馬最後定理本身<strong>沒有直接應用</strong> —— 你不會用它來設計橋樑或加密資料。但它催生的工具極其重要：代數數論、理想數、模形式、伽羅瓦表示、模性提升（modularity lifting）。</p>
+        <p>今天你手機裡的橢圓曲線密碼學（ECC），用的正是同一套橢圓曲線理論 —— 注意，這不是說「因為費馬定理所以有 ECC」，而是兩者站在同一個數學分支上。基礎研究的回報，通常以這種「意外的鄰居」形式出現。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>現在還有甚麼未解決的相關問題？</summary>
+      <div class="fa-body">
+        <p>很多。例如 <strong>abc 猜想</strong>（被視為數論中最深的三個問題之一）、<strong>BSD 猜想</strong>、以及 Langlands 計劃的大部分內容，都仍然開放。懷爾斯當年發展的模性提升技術，如今是這些問題的主要武器之一。</p>
+        <p>換句話說：費馬問題被解決了，但它打開的門，多數還沒走完。</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<section id="ref">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">08</span><h2>資料來源</h2></div>
+    <p class="sub">想深入的話，由這裡開始</p>
+
+    <ol class="src">
+      <li>Andrew Wiles, “Modular elliptic curves and Fermat’s Last Theorem”, <em>Annals of Mathematics</em> 141 (1995), pp. 443–551.</li>
+      <li>Richard Taylor &amp; Andrew Wiles, “Ring-theoretic properties of certain Hecke algebras”, <em>Annals of Mathematics</em> 141 (1995), pp. 553–572.</li>
+      <li>Kenneth A. Ribet, “On modular representations of Gal(Q̄/Q) arising from modular forms”, <em>Inventiones Mathematicae</em> 100 (1990), pp. 431–476.</li>
+      <li>Wikipedia：<a href="https://en.wikipedia.org/wiki/Fermat%27s_Last_Theorem" target="_blank" rel="noopener">Fermat's Last Theorem</a>（含完整歷史與證明架構）</li>
+      <li>Wolfram MathWorld：<a href="https://mathworld.wolfram.com/FermatsLastTheorem.html" target="_blank" rel="noopener">Fermat's Last Theorem</a></li>
+      <li>Simon Singh, <em>Fermat's Enigma</em> (1997) —— 最完整的科普敘事，記錄了 1993 年那場崩塌與修補。</li>
+    </ol>
+
+    <div class="card tight" style="margin-top:28px">
+      <p style="margin:0;font-size:.86rem;color:var(--muted)">
+        <strong style="color:var(--ink2)">關於本頁：</strong>這是一份科普整理，目的是把證明的<em>邏輯骨架</em>講清楚，而不是重現完整證明。文中所有歷史年份與結果歸屬，均以公開發表的文獻為依據；完整證明請參閱上列論文。
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <b>費馬最後定理</b> · 1637 — 1995<br>
+    一句頁邊註記，358 年，一個答案。<br>
+    <a class="backtop" href="#top">↑ 回到頂部</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var nBtns = document.querySelectorAll('#nSeg button');
+  var rng = document.getElementById('rng');
+  var rngVal = document.getElementById('rngVal');
+  var outLine = document.getElementById('outLine');
+  var solList = document.getElementById('solList');
+  var currentN = 2;
+
+  function ipow(base, exp){
+    var r = 1n, b = BigInt(base), e = exp;
+    while(e > 0){
+      if(e & 1) r *= b;
+      b *= b;
+      e >>= 1;
+    }
+    return r;
+  }
+
+  function sup(n){
+    var map = {'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+    return String(n).split('').map(function(d){ return map[d] || d; }).join('');
+  }
+
+  function run(){
+    var n = currentN;
+    var M = parseInt(rng.value, 10);
+    var i, c, a, b, key;
+
+    // 預先把 c^n 建表
+    var table = new Map();
+    for(c = 1; c <= M; c++){
+      table.set(ipow(c, n).toString(), c);
+    }
+
+    var found = [];
+    var CAP = 4000;
+    for(a = 1; a <= M && found.length < CAP; a++){
+      var pa = ipow(a, n);
+      for(b = a + 1; b <= M; b++){
+        key = (pa + ipow(b, n)).toString();
+        var hit = table.get(key);
+        if(hit !== undefined){
+          found.push([a, b, hit]);
+          if(found.length >= CAP) break;
+        }
+      }
+    }
+
+    var count = found.length;
+    if(count === 0){
+      outLine.innerHTML = 'n = <b>' + n + '</b>，上限 ' + M + '：找到 <b>0</b> 組解。';
+    }else{
+      outLine.innerHTML = 'n = <b>' + n + '</b>，上限 ' + M + '：找到 <b>' + count + '</b> 組解' +
+        (count >= CAP ? '（已達顯示上限，實際更多）' : '') + '。';
+    }
+
+    // 只顯示前 12 組
+    solList.innerHTML = '';
+    found.slice(0, 12).forEach(function(t){
+      var el = document.createElement('span');
+      el.textContent = t[0] + sup(n) + ' + ' + t[1] + sup(n) + ' = ' + t[2] + sup(n);
+      solList.appendChild(el);
+    });
+  }
+
+  nBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      nBtns.forEach(function(x){ x.classList.remove('on'); });
+      btn.classList.add('on');
+      currentN = parseInt(btn.getAttribute('data-n'), 10);
+      run();
+    });
+  });
+
+  var timer = null;
+  rng.addEventListener('input', function(){
+    rngVal.textContent = rng.value;
+    clearTimeout(timer);
+    timer = setTimeout(run, 120);
+  });
+
+  rngVal.textContent = rng.value;
+  run();
+})();
+</script>
+</body>
+</html>
