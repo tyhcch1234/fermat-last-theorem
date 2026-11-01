@@ -191,6 +191,43 @@
     .nav,.demo,.backtop{display:none}
     body{background:#fff}
   }
+
+  /* ---------- full proof ---------- */
+  .badge{display:inline-flex;align-items:center;gap:5px;font-size:.7rem;letter-spacing:.05em;font-family:"Noto Serif TC",serif;padding:2px 9px;border-radius:999px;border:1px solid var(--line);background:rgba(255,253,247,.85);color:var(--ink2);white-space:nowrap;vertical-align:.12em}
+  .badge.ok{border-color:rgba(46,110,80,.35);background:rgba(46,110,80,.09);color:#2c6a4d}
+  .badge.mid{border-color:rgba(184,132,44,.42);background:rgba(184,132,44,.11);color:#8a6118}
+  .badge.deep{border-color:rgba(168,50,30,.34);background:rgba(168,50,30,.08);color:var(--red)}
+  .pf{border-left:3px solid var(--line);padding:2px 0 4px 16px;margin:20px 0}
+  .pf .pf-h{font-size:.76rem;letter-spacing:.14em;color:var(--muted);margin:0 0 6px;font-weight:700}
+  .pf.ok{border-left-color:#2c6a4d}
+  .pf.mid{border-left-color:var(--gold)}
+  .pf.deep{border-left-color:var(--red)}
+  .pf p{font-size:.93rem;line-height:1.9;margin:9px 0}
+  .lem{background:rgba(255,253,247,.85);border:1px dashed var(--line);border-radius:12px;padding:16px 18px;margin:20px 0}
+  .lem .lem-h{font-weight:700;color:var(--red);font-size:.88rem;letter-spacing:.04em;margin:0 0 6px}
+  .lem p{font-size:.92rem;margin:7px 0;line-height:1.85}
+  .steps{counter-reset:ps;list-style:none;padding:0;margin:20px 0}
+  .steps>li{counter-increment:ps;position:relative;padding:0 0 16px 36px;font-size:.93rem;color:var(--ink2);line-height:1.88}
+  .steps>li::before{content:counter(ps);position:absolute;left:0;top:3px;width:23px;height:23px;border-radius:50%;background:var(--red-soft);color:var(--red);font-family:"Times New Roman",serif;font-size:.78rem;display:flex;align-items:center;justify-content:center}
+  .tbl{width:100%;border-collapse:collapse;margin:18px 0;font-size:.84rem}
+  .tbl th,.tbl td{border-bottom:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top;color:var(--ink2);line-height:1.7}
+  .tbl th{color:var(--muted);font-weight:700;font-size:.74rem;letter-spacing:.08em}
+  .tbl td:first-child{color:var(--red);font-family:"Times New Roman",serif;width:3.5em}
+  .mono{font-family:"Times New Roman",Times,serif;font-style:italic}
+  .nw{white-space:nowrap}
+  @media (max-width:620px){
+    .tbl{display:block;font-size:.82rem}
+    .tbl thead{display:none}
+    .tbl tbody{display:block}
+    .tbl tr{display:block;border-bottom:1px solid var(--line);padding:11px 0}
+    .tbl td{display:inline-block;border:none;padding:0;vertical-align:top}
+    .tbl td:first-child{width:2.4em}
+    .tbl td:nth-child(2){width:calc(100% - 3em);font-size:.86rem}
+    .tbl td:last-child{display:block;margin:6px 0 0 3em}
+    .tbl td:last-child .badge{white-space:normal;line-height:1.55}
+    .pf{padding-left:12px}
+    .steps>li{padding-left:32px}
+  }
 </style>
 </head>
 <body id="top">
@@ -203,6 +240,7 @@
     <a href="#true">啱定錯</a>
     <a href="#timeline">時間線</a>
     <a href="#proof">證明思路</a>
+    <a href="#fullproof">完整證明</a>
     <a href="#demo">自己搵反例</a>
     <a href="#faq">常見誤解</a>
     <a href="#ref">資料</a>
@@ -397,7 +435,7 @@
     <div class="sec-head"><span class="sec-num">05</span><h2>證明是怎麼做的？</h2></div>
     <p class="sub">先講骨架，再講三個層次</p>
 
-    <p>先說一句老實話：<strong>完整的證明不可能在一個網頁裡講完。</strong>懷爾斯的論文本身 109 頁，預設讀者已掌握模形式、伽羅瓦表示、代數幾何。但證明的<em>骨架</em>其實相當漂亮，而且可以用日常語言講清楚 —— 以下就是那副骨架。</p>
+    <p>先說一句老實話：<strong>完整的證明不可能在一個網頁裡講完。</strong>懷爾斯的論文本身 109 頁，預設讀者已掌握模形式、伽羅瓦表示、代數幾何。但證明的<em>骨架</em>其實相當漂亮，而且可以用日常語言講清楚 —— 以下就是那副骨架。至於<strong>可以逐句寫完的部分</strong>，我們放在下一節 <a href="#fullproof" style="color:var(--red)">06 · 完整證明</a>，並在那一節標明哪幾格是引用已發表的定理。</p>
 
     <p>整個策略可以濃縮成一句：<span class="hl">不直接解方程，而是證明「如果它有解，就會逼出一件根本不可能存在的東西」。</span></p>
 
@@ -462,9 +500,290 @@
   </div>
 </section>
 
+<section id="fullproof">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">06</span><h2>完整證明：把每一格都補上</h2></div>
+    <p class="sub">由「化簡」到「n = 4 全證」，再到懷爾斯那一格</p>
+
+    <p>第 05 節給的是骨架。這一節做另一件事：<strong>把能夠逐句驗證的部分，真的逐句寫完</strong>，並且老實標明哪一格是本文自證、哪一格是引用 1990／1995 年已發表的定理。做完之後你手上會有一份<em>沒有不明步驟</em>的證明 —— 只是其中兩格，全世界能自己重做的人不多。</p>
+
+    <div class="card tight">
+      <p style="margin:0 0 12px"><strong>先定義「完整」是甚麼意思</strong></p>
+      <p style="margin:8px 0">① <b>邏輯完整</b>：每一步都由前面的步驟推出來，沒有「顯然」、「不難看出」、「眾所周知」。<span class="badge ok">本文提供</span></p>
+      <p style="margin:8px 0">② <b>細節完整</b>：連 109 頁裡的每一版計算都重寫一次。<span class="badge deep">任何網頁都做不到</span></p>
+      <p style="margin:8px 0;font-size:.88rem;color:var(--muted)">所以判斷一篇文章有沒有資格叫「完整證明」，不是看它厚不厚，而是看它有沒有把 ② 的那幾格<b>指名道姓</b>地標出來，還是偷偷用一句「可以證明」蓋住。</p>
+    </div>
+
+    <h3>完整度一覽</h3>
+    <table class="tbl">
+      <thead><tr><th>步驟</th><th>要證的東西</th><th>狀態</th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td>只需處理 <em>n</em> = 4 與奇質數 <em>p</em></td><td><span class="badge ok">本文全證</span></td></tr>
+        <tr><td>1</td><td><em>n</em> = 4：無限下降法</td><td><span class="badge ok">本文全證</span></td></tr>
+        <tr><td>2a</td><td><em>n</em> = 3，三數皆非 3 的倍數</td><td><span class="badge ok">模 9，三行</span></td></tr>
+        <tr><td>2b</td><td><em>n</em> = 3，3 整除其中一數</td><td><span class="badge mid">骨架完整，代數見 Legendre 1825</span></td></tr>
+        <tr><td>3</td><td><em>p</em> ≥ 5：由假設造出弗雷曲線</td><td><span class="badge ok">可手算驗證</span></td></tr>
+        <tr><td>4</td><td>里貝特：這條曲線的表示降到 level 2</td><td><span class="badge deep">引用定理（1990）</span></td></tr>
+        <tr><td>5</td><td>懷爾斯–泰勒：半穩定曲線全部是模的</td><td><span class="badge deep">引用定理（1995）</span></td></tr>
+        <tr><td>6</td><td>level 2 沒有模形式 ⇒ 矛盾</td><td><span class="badge ok">本文全證</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>第 0 步：先砍掉九成九的指數</h3>
+    <p>定理講的是「所有 <em>n</em> ≥ 3」，但其實只要證兩個家族。這一步在 17 世紀就完成了，而且完全初等。</p>
+
+    <div class="lem">
+      <p class="lem-h">引理 0.1（只需看質數與 4）</p>
+      <p>若存在 <em>n</em> ≥ 3 與正整數 <em>x</em>、<em>y</em>、<em>z</em> 使 <em>x<sup>n</sup></em> + <em>y<sup>n</sup></em> = <em>z<sup>n</sup></em>，則存在<strong>奇質數 <em>p</em></strong> 或 <strong><em>n</em> = 4</strong> 的同類解。</p>
+    </div>
+
+    <div class="pf ok">
+      <p class="pf-h">證明</p>
+      <p>拿任何一個 <em>n</em> ≥ 3。分兩種情形。</p>
+      <p><b>有奇質因數。</b>寫 <em>n</em> = <em>pm</em>，其中 <em>p</em> 為奇質數。令 <em>X</em> = <em>x<sup>m</sup></em>、<em>Y</em> = <em>y<sup>m</sup></em>、<em>Z</em> = <em>z<sup>m</sup></em>，則</p>
+      <p style="text-align:center"><em>X<sup>p</sup></em> + <em>Y<sup>p</sup></em> = (<em>x<sup>m</sup></em>)<em><sup>p</sup></em> + (<em>y<sup>m</sup></em>)<em><sup>p</sup></em> = <em>x<sup>n</sup></em> + <em>y<sup>n</sup></em> = <em>z<sup>n</sup></em> = <em>Z<sup>p</sup></em>，</p>
+      <p>所以指數 <em>p</em> 也有解。</p>
+      <p><b>沒有奇質因數。</b>那麼 <em>n</em> = 2<sup><em>k</em></sup>。因為 <em>n</em> ≥ 3 而 2 的次方只有 1、2、4、8…，所以 <em>k</em> ≥ 2，<em>n</em> 是 4 的倍數：<em>n</em> = 4<em>j</em>。令 <em>X</em> = <em>x<sup>j</sup></em> 等，同理得 <em>X</em>⁴ + <em>Y</em>⁴ = <em>Z</em>⁴。∎</p>
+      <p style="font-size:.86rem;color:var(--muted);margin-top:8px">反方向是廢話：如果質數 <em>p</em> 有解，那麼 <em>p</em> 的倍數統統有解。所以「所有 <em>n</em> ≥ 3 無解」<b>等價於</b>「所有奇質數 <em>p</em> 無解，而且 <em>n</em> = 4 無解」。</p>
+    </div>
+
+    <div class="lem">
+      <p class="lem-h">引理 0.2（可以假設互質，並取最小的一組）</p>
+      <p>若有解 <em>x<sup>n</sup></em> + <em>y<sup>n</sup></em> = <em>z<sup>n</sup></em>，令 <em>d</em> = gcd(<em>x</em>, <em>y</em>)。則 <em>d</em> 整除 <em>z</em>，而且除以 <em>d<sup>n</sup></em> 之後仍然是一組解。故可假設 gcd(<em>x</em>, <em>y</em>) = 1。</p>
+    </div>
+
+    <div class="pf ok">
+      <p class="pf-h">證明</p>
+      <p>因 <em>d<sup>n</sup></em> 整除 <em>x<sup>n</sup></em> 與 <em>y<sup>n</sup></em>，故 <em>d<sup>n</sup></em> 整除 <em>z<sup>n</sup></em>，於是 <em>d</em> 整除 <em>z</em>。把等式兩邊同除 <em>d<sup>n</sup></em> 得 (<em>x</em>/<em>d</em>)<em><sup>n</sup></em> + (<em>y</em>/<em>d</em>)<em><sup>n</sup></em> = (<em>z</em>/<em>d</em>)<em><sup>n</sup></em>，仍是一組解。若 <em>d</em> &gt; 1，<em>z</em> 就變小了；無限次除下去不可能，所以總有一次會停 —— 停在 gcd = 1 為止。∎</p>
+      <p style="font-size:.86rem;color:var(--muted);margin-top:8px">這條「取最小的一組」正是下一步無限下降法用來撞牆的東西：<b>最小性</b>。</p>
+    </div>
+
+    <h3>第 1 步：<em>n</em> = 4，完整寫一次無限下降法</h3>
+    <p>費馬本人留下來的證明就是這一個。它的漂亮之處是：不用任何 19 世紀以後的工具，只需要「畢氏三元組的公式」加「一個很小的算術觀察」。</p>
+
+    <div class="eqbox">
+      <div class="math">x<sup>4</sup> + y<sup>4</sup> = z<sup>2</sup></div>
+      <div class="note">我們證更強的版本：右邊是平方就夠，不必是四次方</div>
+    </div>
+
+    <p>為甚麼證更強反而更容易？因為 <em>z</em>⁴ 本身就是一個平方 (<em>z</em>²)²，所以<strong>平方版無解 ⇒ 四次方版無解</strong>。而平方版多了一個好用的工具：畢氏三元組。</p>
+
+    <div class="lem">
+      <p class="lem-h">引理 1.1（本原畢氏三元組）</p>
+      <p>設 <em>a</em>、<em>b</em>、<em>c</em> 為正整數，<span class="nw"><em>a</em>² + <em>b</em>² = <em>c</em>²</span>，<span class="nw">gcd(<em>a</em>, <em>b</em>) = 1</span>，且 <em>a</em> 為奇、<em>b</em> 為偶。則存在正整數 <span class="nw"><em>m</em> &gt; <em>n</em></span>，<span class="nw">gcd(<em>m</em>, <em>n</em>) = 1</span>，<em>m</em> 與 <em>n</em> 一奇一偶，使</p>
+      <p style="text-align:center"><em>a</em> = <em>m</em>² − <em>n</em>²，　<em>b</em> = 2<em>mn</em>，　<em>c</em> = <em>m</em>² + <em>n</em>²。</p>
+    </div>
+
+    <div class="pf ok">
+      <p class="pf-h">證明</p>
+      <p>由 <em>a</em>² = <em>c</em>² − <em>b</em>² 得 <em>b</em>² = (<em>c</em> − <em>a</em>)(<em>c</em> + <em>a</em>)。</p>
+      <p><b>兩個因子都是偶數。</b>因為 <em>a</em> 奇、<em>b</em> 偶 ⇒ <em>c</em>² = <em>a</em>² + <em>b</em>² 是奇 + 偶 = 奇，所以 <em>c</em> 奇；奇 ± 奇 = 偶。✓</p>
+      <p>令 <em>r</em> = (<em>c</em> + <em>a</em>)/2，<em>s</em> = (<em>c</em> − <em>a</em>)/2，兩個都是正整數，而且</p>
+      <p style="text-align:center"><em>rs</em> = (<em>c</em> + <em>a</em>)(<em>c</em> − <em>a</em>)/4 = <em>b</em>²/4 = (<em>b</em>/2)²。</p>
+      <p><b>gcd(<em>r</em>, <em>s</em>) = 1。</b>任何公因數 <em>g</em> 整除 <em>r</em> + <em>s</em> = <em>c</em> 與 <em>r</em> − <em>s</em> = <em>a</em>，所以 <em>g</em> 整除 gcd(<em>a</em>, <em>c</em>)。而本原三元組必有 gcd(<em>a</em>, <em>c</em>) = 1（否則 <em>a</em>、<em>c</em> 的公因數也整除 <em>b</em>² = <em>c</em>² − <em>a</em>²，違反 gcd(<em>a</em>, <em>b</em>) = 1）。故 <em>g</em> = 1。</p>
+      <p><b>兩個互質數的乘積是平方 ⇒ 各自是平方。</b>把 <em>r</em>、<em>s</em> 質因數分解：每個質數只會出現在其中一邊，而它在乘積裡的次數是偶數，所以在自己那一邊也是偶數。故 <em>r</em> = <em>m</em>²，<em>s</em> = <em>n</em>²，其中 <em>m</em> &gt; <em>n</em> ≥ 1。</p>
+      <p>代回去：<em>a</em> = <em>r</em> − <em>s</em> = <em>m</em>² − <em>n</em>²，<em>c</em> = <em>r</em> + <em>s</em> = <em>m</em>² + <em>n</em>²，<em>b</em> = 2<em>mn</em>。<em>m</em>、<em>n</em> 一奇一偶（否則 <em>m</em>² − <em>n</em>² 為偶，與 <em>a</em> 奇矛盾），互質則來自 gcd(<em>r</em>, <em>s</em>) = 1。∎</p>
+    </div>
+
+    <div class="lem">
+      <p class="lem-h">引理 1.2（兩個很小的算術事實）</p>
+      <p>(i) 若 <em>x</em> 為奇數，則 <em>x</em>² ≡ 1 (mod 4)，且 <em>x</em>⁴ ≡ 1 (mod 16)。</p>
+      <p>(ii) 平方數除以 16 的餘數只可能是 0、1、4、9。特別地，<em>x</em>⁴ + <em>y</em>⁴（<em>x</em>、<em>y</em> 皆奇）≡ 1 + 1 = 2 (mod 16)，<b>不可能是平方</b>。</p>
+    </div>
+
+    <div class="pf ok">
+      <p class="pf-h">證明</p>
+      <p>(i) 奇數寫成 2<em>k</em> + 1，平方得 4<em>k</em>(<em>k</em> + 1) + 1，而 <em>k</em>(<em>k</em> + 1) 必為偶，所以 ≡ 1 (mod 8)；再平方，1² 在 mod 16 下仍是 1（嚴格講：≡ 1 (mod 8) 的數平方 ≡ 1 (mod 16)）。</p>
+      <p>(ii) 偶數 = 2<em>t</em>，平方 = 4<em>t</em>² ≡ 0 或 4 (mod 16)；奇數平方 ≡ 1 或 9 (mod 16)（逐個試 1、3、5、7 即可）。兩奇數的四次方之和 ≡ 2，而 2 不在 {0, 1, 4, 9} 之中。∎</p>
+    </div>
+
+    <p>工具齊了。以下是主證明，六步。</p>
+
+    <ol class="steps">
+      <li><b>假設有解，並取 <em>z</em> 最小的一組。</b>由引理 0.2，可設 gcd(<em>x</em>, <em>y</em>) = 1。由於平方版的無解性會遺傳給更小的 <em>z</em>，最小性就是我們最後要撞的那堵牆。</li>
+      <li><b><em>x</em>、<em>y</em> 不可同為奇數。</b>否則由引理 1.2(ii)，<em>z</em>² ≡ 2 (mod 16)，但平方數不可能 ≡ 2。所以一奇一偶；交換 <em>x</em>、<em>y</em> 不影響方程，故設 <b><em>x</em> 奇、<em>y</em> 偶</b>。</li>
+      <li><b>對 (<em>x</em>², <em>y</em>², <em>z</em>) 用引理 1.1。</b>這是一個本原畢氏三元組（(<em>x</em>²)² + (<em>y</em>²)² = <em>z</em>²），奇的一邊是 <em>x</em>²。於是有 <em>m</em> &gt; <em>n</em>，gcd(<em>m</em>, <em>n</em>) = 1，一奇一偶，使
+        <div style="text-align:center;margin:8px 0"><span class="nw"><em>x</em>² = <em>m</em>² − <em>n</em>²</span>，　<span class="nw"><em>y</em>² = 2<em>mn</em></span>，　<span class="nw"><em>z</em> = <em>m</em>² + <em>n</em>²</span>。</div></li>
+      <li><b>把 <em>y</em>² = 2<em>mn</em> 拆開。</b><em>m</em>、<em>n</em> 互質。對任何奇質數 <em>q</em>，它在 <em>y</em>² 裡的次數是偶數，而它只落在 <em>m</em> 或 <em>n</em> 其中一邊，所以在那一邊也是偶數次。至於質數 2：若 <em>m</em> 為偶，則 1 + (2 在 <em>m</em> 中的次數) 是偶數，故該次數為奇，於是 <em>m</em>/2 是完全平方。結論只有兩個可能：
+        <div style="margin:8px 0 0 0"><b>情況一：</b><span class="nw"><em>m</em> = 2<em>s</em>²，<em>n</em> = <em>t</em>²</span></div>
+        <div><b>情況二：</b><span class="nw"><em>m</em> = <em>t</em>²，<em>n</em> = 2<em>s</em>²</span></div></li>
+      <li><b>情況一直接矛盾。</b>代入 <em>x</em>² = <em>m</em>² − <em>n</em>² 得
+        <div style="text-align:center;margin:8px 0"><em>x</em>² + <em>t</em>⁴ = 4<em>s</em>⁴ = (2<em>s</em>²)²。</div>
+        左邊：<em>x</em> 奇 ⇒ <em>x</em>² ≡ 1 (mod 4)；<em>m</em> 偶 ⇒ <em>n</em> = <em>t</em>² 奇 ⇒ <em>t</em> 奇 ⇒ <em>t</em>⁴ ≡ 1 (mod 4)。所以左邊 ≡ 2 (mod 4)，右邊 ≡ 0 (mod 4)。不可能。</li>
+      <li><b>情況二產生一個更小的解，違反最小性。</b>代入得 <em>x</em>² = <em>t</em>⁴ − 4<em>s</em>⁴，即
+        <div style="text-align:center;margin:8px 0"><em>x</em>² + (2<em>s</em>²)² = (<em>t</em>²)²。</div>
+        這又是本原畢氏三元組（若質數 <em>q</em> 同時整除 <em>x</em> 與 2<em>s</em>² = <em>n</em>，則由 <em>x</em>² + <em>n</em>² = <em>m</em>² 得 <em>q</em> | <em>m</em>，與 gcd(<em>m</em>, <em>n</em>) = 1 矛盾）。奇的一邊是 <em>x</em>，偶的一邊是 2<em>s</em>²，再用一次引理 1.1：
+        <div style="text-align:center;margin:8px 0"><span class="nw">2<em>s</em>² = 2<em>uv</em></span>，即 <span class="nw"><em>s</em>² = <em>uv</em></span>；　<span class="nw"><em>x</em> = <em>u</em>² − <em>v</em>²</span>；　<span class="nw"><em>t</em>² = <em>u</em>² + <em>v</em>²</span>，</div>
+        而 gcd(<em>u</em>, <em>v</em>) = 1。兩個互質數之積 <em>uv</em> 是平方 ⇒ <em>u</em> = <em>r</em>²，<em>v</em> = <em>w</em>²。於是
+        <div style="text-align:center;margin:8px 0"><em>r</em>⁴ + <em>w</em>⁴ = <em>t</em>²。</div>
+        這是同一條方程的一組<strong>新解</strong>，而它的「<em>z</em>」是 <em>t</em>，比原本的 <em>z</em> = <em>m</em>² + <em>n</em>² = <em>t</em>⁴ + 4<em>s</em>⁴ 小（因為 <em>t</em> ≥ 1 時 <em>t</em>⁴ + 4<em>s</em>⁴ &gt; <em>t</em>）。這違反了第 1 步「<em>z</em> 最小」的選擇。</li>
+    </ol>
+
+    <p>兩種情況都不可能，假設不成立。<strong>故 <em>x</em>⁴ + <em>y</em>⁴ = <em>z</em>² 無正整數解，<em>n</em> = 4 的費馬方程因而無解。</strong><span class="badge ok">證畢</span></p>
+
+    <div class="card tight">
+      <p style="margin:0;font-size:.9rem"><strong>這一步為甚麼叫「下降」：</strong>我們沒有直接撞出矛盾，而是用一組解造出<em>更小</em>的一組解。如果每組解都能造出更小的，就會有無窮無盡往下掉的正整數 —— 但正整數不能無限下降。所以一開始那組解不可能存在。這個手法費馬叫它 <em>descente infinie</em>，是後來三百年裡所有 <em>n</em> 的證明的共同語言。</p>
+    </div>
+
+    <h3>第 2 步：<em>n</em> = 3，一個乾淨的模 9，加一個不乾淨的下降</h3>
+    <p>這一格是整條古典路線的試金石。200 年來所有「三頁證明」都在這裡滑倒，原因很具體：它需要進入一個新的數系。</p>
+
+    <div class="pf ok">
+      <p class="pf-h">情況 (a)：三數都不是 3 的倍數 —— 三行證完</p>
+      <p>先注意任何整數的立方除以 9，只可能是 0、1、8：</p>
+      <p style="text-align:center">1³ = 1，2³ = 8，3³ = 0，4³ = 64 ≡ 1，5³ ≡ 8，6³ ≡ 0，7³ ≡ 1，8³ ≡ 8　(mod 9)</p>
+      <p>而且 <em>n</em>³ ≡ ±1 (mod 9) 正好對應「<em>n</em> 不是 3 的倍數」。所以若 <em>x</em>、<em>y</em>、<em>z</em> 全部不被 3 整除，則</p>
+      <p style="text-align:center"><span class="nw"><em>x</em>³ + <em>y</em>³ ∈ {1 + 1, 1 − 1, −1 − 1} ≡ {2, 0, 7}</span>　<span class="nw">(mod 9)</span>，</p>
+      <p>而 <em>z</em>³ ∈ {1, 8}。兩個集合沒有交集 —— 矛盾。∎</p>
+    </div>
+
+    <p>剩下的只有「3 整除 <em>x</em>、<em>y</em>、<em>z</em> 其中之一」這個情況。要處理它，歐拉把方程搬進一個新的數系。</p>
+
+    <div class="card tight">
+      <p style="margin:0 0 8px"><strong>新數系：ℤ[ω]</strong></p>
+      <p style="margin:6px 0">令 ω 為三次單位根（ω³ = 1，ω ≠ 1），即 ω = (−1 + √−3)/2，滿足 ω² + ω + 1 = 0。考慮</p>
+      <p style="text-align:center;margin:8px 0">ℤ[ω] = { <em>a</em> + <em>b</em>ω ： <em>a</em>, <em>b</em> 為整數 }，</p>
+      <p style="margin:6px 0">定義「大小」（範數）<span class="mono">N(<em>a</em> + <em>b</em>ω) = <em>a</em>² − <em>ab</em> + <em>b</em>²</span>。它有個關鍵性質：<strong>N(αβ) = N(α)N(β)</strong>。</p>
+    </div>
+
+    <p>為甚麼要搬進來？因為在 ℤ 裡 <em>x</em>³ + <em>y</em>³ 只拆得開一半，而在 ℤ[ω] 裡它會裂成三個：</p>
+
+    <div class="eqbox">
+      <div class="math">x<sup>3</sup> + y<sup>3</sup> = (x + y)(x + ωy)(x + ω<sup>2</sup>y)</div>
+      <div class="note">三個因子相乘等於 z³；若它們「互質」，每個就只能是立方</div>
+    </div>
+
+    <div class="lem">
+      <p class="lem-h">引理 2.1（ℤ[ω] 是唯一分解環）</p>
+      <p>ℤ[ω] 裡的每個非零元素，分解成「質元素」乘積的方式唯一（差一個單位 ±1, ±ω, ±ω²）。</p>
+    </div>
+
+    <div class="pf ok">
+      <p class="pf-h">為甚麼（幾何版，一句話講完）</p>
+      <p>把 ℤ[ω] 畫在複數平面上，它是一個<strong>正三角形格子</strong>（不是正方形格子）。任何一點到最近格點的距離最多 1/√3 &lt; 1，所以「帶餘除法」做得成：被除數 = 商 × 除數 + 餘數，而餘數的範數嚴格小於除數的範數。有帶餘除法 ⇒ 歐幾里得環 ⇒ 唯一分解。這也是歐拉當年漏掉的一步：他假設了唯一分解，但 ℤ[√−3] 並不具備它；換成 ℤ[ω] 才成立，補完的人是勒讓德與高斯。<span class="badge ok">關鍵補丁</span></p>
+    </div>
+
+    <div class="lem">
+      <p class="lem-h">引理 2.2（互質乘積是立方 ⇒ 各自是立方）</p>
+      <p>設 α、β 在 ℤ[ω] 中互質（沒有共同的質元素），且 αβ 是某元素的立方。則 α、β 各自等於「一個單位乘以一個立方」。</p>
+    </div>
+
+    <div class="pf ok">
+      <p class="pf-h">證明</p>
+      <p>由引理 2.1，把 α、β 各自分解成質元素。因為兩者互質，每個質元素只出現在一邊；而它在乘積 αβ 裡的指數是 3 的倍數，所以在自己那一邊也是 3 的倍數。把指數三個一組收起來，就是立方。剩下沒收的是單位。∎</p>
+    </div>
+
+    <p>於是 <em>x</em> + ω<em>y</em> 應該是「單位 × 立方」。把那個單位記作 ε（ε ∈ {±1, ±ω, ±ω²}）：</p>
+
+    <p style="text-align:center"><em>x</em> + ω<em>y</em> = ε(<em>u</em> + <em>v</em>ω)³。</p>
+
+    <p>先取 ε = 1。其餘的 ε 只是把整個平面旋轉 120° 或 240°（乘以 ω 就是旋轉），係數比較照樣成立，只差一個符號 —— 下面不妨就用 ε = ±1 來看。</p>
+
+    <p>右邊老實展開（用 ω² = −1 − ω、ω³ = 1）：</p>
+
+    <div class="eqbox">
+      <div class="math">(u + vω)<sup>3</sup> = (u<sup>3</sup> − 3uv<sup>2</sup> + v<sup>3</sup>) + (3u<sup>2</sup>v − 3uv<sup>2</sup>)ω</div>
+      <div class="note">ω 的係數 = 3uv(u − v)：三個整數的乘積，被 3 整除</div>
+    </div>
+
+    <p>比較 ω 的係數，得到 <strong><em>y</em> = ±3<em>uv</em>(<em>u</em> − <em>v</em>)</strong>。比較實部，得到 <em>x</em> = ±(<em>u</em>³ − 3<em>uv</em>² + <em>v</em>³)。這兩個式子加上原本的 <em>z</em>³ = <em>x</em>³ + <em>y</em>³，就能反過來把 (<em>x</em>, <em>y</em>, <em>z</em>) 換成一組<strong>更小的</strong>解 —— 又是下降，撞的又是「<em>z</em> 最小」那堵牆。</p>
+
+    <div class="pf mid">
+      <p class="pf-h">誠實標記：這一格還沒寫完</p>
+      <p>上面每個零件都可驗證，缺的是把「比較係數」接到「造出更小的解」之間那兩三頁代數：要小心三個因子其實可能共用 <em>1</em> − ω（範數為 3 的那個質元素），要處理符號與單位，然後把新解的三個數逐一證明比舊的小。這是勒讓德 1825 年補完的部分，完整版見 Edwards《Fermat's Last Theorem》第 2 章。</p>
+      <p>換句話說：<b>n = 3 的證明骨架是完整的，代數留了一個明確的洞，而且我們知道洞在哪、由誰補的。</b>這跟「三頁證明」的差別在於：它不會假裝洞不存在。</p>
+    </div>
+
+    <h3>第 3 步：<em>p</em> ≥ 5，懷爾斯的那一格</h3>
+    <p>古典方法在非正則質數前停住（庫默能處理「正則」的，37 就不行）。現代路線乾脆不碰 <em>p</em> 的算術，改為<strong>把假設翻譯成幾何物件</strong>。</p>
+
+    <div class="chain">
+      <div class="step">
+        <div class="no">1</div>
+        <div>
+          <h4>假設有解，造一條曲線</h4>
+          <p>設 <em>a<sup>p</sup></em> + <em>b<sup>p</sup></em> = <em>c<sup>p</sup></em>，gcd(<em>a</em>, <em>b</em>) = 1，<em>p</em> ≥ 5 為質數。弗雷曲線：<span class="mono"><em>E</em>：<em>y</em>² = <em>x</em>(<em>x</em> − <em>a<sup>p</sup></em>)(<em>x</em> + <em>b<sup>p</sup></em>)</span>。</p>
+        </div>
+      </div>
+      <div class="arrow">▼</div>
+      <div class="step">
+        <div class="no">2</div>
+        <div>
+          <h4>手算它的判別式，看見「太整齊」</h4>
+          <p>判別式 Δ = 16(<em>abc</em>)<sup>2<em>p</em></sup> —— 一個完全 <em>p</em> 次方的形狀。而且這條曲線是<strong>半穩定</strong>的（在 <em>p</em> 以外好約化，在 <em>p</em> 處乘法約化）。這兩點都可以逐點驗算，不需要任何深定理。<span class="badge ok">本文可查</span></p>
+        </div>
+      </div>
+      <div class="arrow">▼</div>
+      <div class="step">
+        <div class="no">3</div>
+        <div>
+          <h4>它的 mod p 表示太乾淨，乾淨到只可能來自 level 2</h4>
+          <p>先看不可約性：這條曲線在 <em>p</em> 有乘法約化，由馬祖爾的撓點定理，<em>p</em> ≥ 5 時表示不可能有 <em>p</em> 階有理點，故此表示絕對不可約。有了這點，里貝特 1990（實現塞爾 1987 的 ε-猜想）就可以把它一層層「降 level」，最後降到 level 2：它必須來自一個 level 2、權 2 的模形式。<span class="badge deep">引用定理</span></p>
+        </div>
+      </div>
+      <div class="arrow">▼</div>
+      <div class="step">
+        <div class="no">4</div>
+        <div>
+          <h4>但 level 2 沒有模形式</h4>
+          <p>dim <em>S</em>₂(Γ₀(2)) = 0 —— 因為模曲線 <em>X</em>₀(2) 的虧格是 0。這一格可以用虧格公式<b>手算</b>：<span class="mono">g = 1 + [SL₂(ℤ):Γ₀(2)]/12 − ν₂/4 − ν₃/3 − ν<sub>∞</sub>/2 = 0</span>。<span class="badge ok">本文可查</span></p>
+        </div>
+      </div>
+      <div class="arrow">▼</div>
+      <div class="step">
+        <div class="no">5</div>
+        <div>
+          <h4>可是懷爾斯說它一定模</h4>
+          <p>懷爾斯–泰勒 1995：每條半穩定的橢圓曲線都是模的。而 <em>E</em> 正是半穩定 ⇒ <em>E</em> 模 ⇒ 存在對應的模形式。<span class="badge deep">引用定理</span></p>
+        </div>
+      </div>
+      <div class="arrow">▼</div>
+      <div class="step">
+        <div class="no">6</div>
+        <div>
+          <h4>兩邊相撞</h4>
+          <p>「是模的」（第 5 步）與「只可能來自 level 2，而 level 2 是空的」（第 3、4 步）互相矛盾。所以假設不成立，<em>a<sup>p</sup></em> + <em>b<sup>p</sup></em> = <em>c<sup>p</sup></em> 無解。<b>證畢。</b></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card tight">
+      <p style="margin:0;font-size:.9rem"><strong>為甚麼第 4 步這麼致命：</strong>level 2 是「最省資料」的等級 —— 只允許 2 這一個質數的分歧。弗雷曲線的判別式偏偏乾淨到所有其他質數的資訊都被 <em>p</em> 次方「吸收」掉，於是它除了 2 之外沒有東西可講。而 level 2 的模形式數量是 0：連一個可以拿來對應的對象都沒有。</p>
+    </div>
+
+    <p>把三格串起來，整條證明的邏輯就是：<span class="hl">假設有解 ⇒ 造出一條「必須存在」又「不可能存在」的曲線</span>。這跟直接解方程完全是兩種工作方式 —— 也是為甚麼它用了 358 年。</p>
+
+    <h3>八行速查</h3>
+    <div class="card tight">
+      <ol class="steps" style="margin:6px 0 0">
+        <li>只需證 <em>n</em> = 4 與奇質數 <em>p</em>（引理 0.1），並可假設 gcd(<em>x</em>, <em>y</em>) = 1（引理 0.2）。</li>
+        <li><em>n</em> = 4：無限下降法，用畢氏三元組公式把解變小，撞「<em>z</em> 最小」。全證。</li>
+        <li><em>n</em> = 3：3∤<em>xyz</em> 用 mod 9 三行解決；3 | <em>xyz</em> 進 ℤ[ω]，三個因子各為立方，比較係數後下降。</li>
+        <li><em>p</em> ≥ 5：假設有解，造弗雷曲線 <em>y</em>² = <em>x</em>(<em>x</em> − <em>a<sup>p</sup></em>)(<em>x</em> + <em>b<sup>p</sup></em>)，判別式 16(<em>abc</em>)<sup>2<em>p</em></sup>，半穩定。</li>
+        <li>里貝特：它的表示必須降到 level 2。</li>
+        <li>虧格公式：dim <em>S</em>₂(Γ₀(2)) = 0，所以 level 2 的東西不存在。</li>
+        <li>懷爾斯–泰勒：半穩定曲線一定模 ⇒ 它必須存在。</li>
+        <li>矛盾 ⇒ 無解 ⇒ 定理成立。</li>
+      </ol>
+    </div>
+
+    <h3>順手幫你識破「三頁證明」</h3>
+    <p>下次再有人寄來一份短證明，問三個問題就夠：</p>
+    <ul style="color:var(--ink2);font-size:.94rem;line-height:1.9;padding-left:20px">
+      <li><b>「<em>n</em> = 3、3 整除其中一數」怎麼處理？</b>這是最多假證明滑倒的地方 —— 它逼你用 ℤ[ω] 的唯一分解，或者別的等價機器。</li>
+      <li><b>有沒有處理非正則質數？</b>如果作者用庫默的辦法，問他 37 怎麼辦。</li>
+      <li><b>「所有 <em>p</em>」是怎麼一次過關掉的？</b>逐個質數驗證永遠驗不完；要嘛有模性定理，要嘛有別的整體性論證。</li>
+    </ul>
+
+    <div class="card tight">
+      <p style="margin:0;font-size:.88rem;color:var(--muted)"><strong>最後一句老實話：</strong>這一節把「可以完整寫出來的部分」寫完了，也把「必須引用哪兩條定理」指名道姓地標了出來。第 4、5 步的內部（變形環、Hecke 代數、Taylor–Wiles 系統）仍然是 109 頁的硬工作，本文沒有假裝重寫它 —— 這正是「完整證明」與「假裝完整」的分界線。</p>
+    </div>
+  </div>
+</section>
+
 <section id="demo">
   <div class="wrap">
-    <div class="sec-head"><span class="sec-num">06</span><h2>自己動手：搵唔搵到反例？</h2></div>
+    <div class="sec-head"><span class="sec-num">07</span><h2>自己動手：搵唔搵到反例？</h2></div>
     <p class="sub">選一個指數，讓電腦窮舉所有組合</p>
 
     <p>下面這個小工具會把所有 <em>a</em> &lt; <em>b</em> &lt; <em>c</em> ≤ 上限的組合全部試一次（用 BigInt 精確計算，不會有浮點誤差）。你可以親眼看到：<em>n</em> = 2 時解多得滿天飛，一到 3 就全部消失。</p>
@@ -504,7 +823,7 @@
 
 <section id="faq">
   <div class="wrap">
-    <div class="sec-head"><span class="sec-num">07</span><h2>幾個常見誤解</h2></div>
+    <div class="sec-head"><span class="sec-num">08</span><h2>幾個常見誤解</h2></div>
     <p class="sub">順手拆掉幾個流傳很廣的說法</p>
 
     <details open>
@@ -558,7 +877,7 @@
 
 <section id="ref">
   <div class="wrap">
-    <div class="sec-head"><span class="sec-num">08</span><h2>資料來源</h2></div>
+    <div class="sec-head"><span class="sec-num">09</span><h2>資料來源</h2></div>
     <p class="sub">想深入的話，由這裡開始</p>
 
     <ol class="src">
@@ -572,7 +891,7 @@
 
     <div class="card tight" style="margin-top:28px">
       <p style="margin:0;font-size:.86rem;color:var(--muted)">
-        <strong style="color:var(--ink2)">關於本頁：</strong>這是一份科普整理，目的是把證明的<em>邏輯骨架</em>講清楚，而不是重現完整證明。文中所有歷史年份與結果歸屬，均以公開發表的文獻為依據；完整證明請參閱上列論文。
+        <strong style="color:var(--ink2)">關於本頁：</strong>這是一份科普整理。第 05 節給證明的<em>邏輯骨架</em>；第 06 節把可以逐句驗證的部分完整寫出，並指名標記兩格引用定理（里貝特 1990、懷爾斯–泰勒 1995）。109 頁的內部計算沒有重寫，請參閱上列論文。文中歷史年份與結果歸屬，均以公開發表的文獻為依據。
       </p>
     </div>
   </div>
